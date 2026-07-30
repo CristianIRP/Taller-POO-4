@@ -1,0 +1,61 @@
+@startuml
+skin rose
+
+class Usuario {
+
+IdUsuario
+Nombre
+RUT
+Correo
+Clave
+}
+
+class Contenido {
+
+Id
+Titulo
+Tipo
+AnioLanzamiento
+Genero
+}
+
+class Pelicula {
+
+FechaExpiracion
+DuracionMinutos
+}
+
+class Serie {
+
+FechaExpiracion
+Temporadas
+EpisodiosPorTemporada
+DuracionEpisodio
+}
+
+class Documental {
+
+DuracionMinima
+TemaPrincipal
+}
+
+class ReporteReproduccion {
+
+IdReporte
+NombreUsuario
+Fecha
+DuracionTotal
+}
+
+' Relaciones principales
+
+Contenido -- Pelicula : es un tipo de <
+Contenido -- Serie : es un tipo de <
+Contenido -- Documental : es un tipo de <
+
+ReporteReproduccion "1" -- "1.." Contenido : incluye >
+Usuario "1" -- "*" ReporteReproduccion : genera >
+
+
+
+@enduml

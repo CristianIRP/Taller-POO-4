@@ -1,0 +1,111 @@
+@startuml
+skin rose
+left to right direction
+
+class Usuario {
+    - idUsuario: String
+    - nombre: String
+    - rut: String
+    - correo: String
+    - clave: String
+
+    + getIdUsuario(): String
+    + getNombre(): String
+    + getRut(): String
+    + getCorreo(): String
+    + getClave(): String
+}
+
+abstract class Contenido {
+    - id: String
+    - titulo: String
+    - tipo: String
+    - anioLanzamiento: int
+    - genero: String
+
+    + getId(): String
+    + getTitulo(): String
+    + getTipo(): String
+    + getAnioLanzamiento(): int
+    + getGenero(): String
+    + obtenerDuracion(): int
+    + compareTo(otro: Contenido): int
+}
+
+class Pelicula {
+    - fechaExpiracion: LocalDate
+    - duracionMinutos: int
+
+    + getFechaExpiracion(): LocalDate
+    + obtenerDuracion(): int
+}
+
+class Serie {
+    - fechaExpiracion: LocalDate
+    - temporadas: int
+    - episodiosPorTemporada: int
+    - duracionEpisodio: int
+
+    + getFechaExpiracion(): LocalDate
+    + getTemporadas(): int
+    + getEpisodiosPorTemporada(): int
+    + getDuracionEpisodio(): int
+    + obtenerDuracion(): int
+}
+
+class Documental {
+    - duracionMinima: int
+    - temaPrincipal: String
+
+    + getTemaPrincipal(): String
+    + obtenerDuracion(): int
+}
+
+class ReporteReproduccion {
+    - idReporte: String
+    - nombreUsuario: String
+    - fecha: LocalDate
+    - duracionTotal: int
+
+    + getIdReporte(): String
+    + getNombreUsuario(): String
+    + getFecha(): LocalDate
+    + getDuracionTotal(): int
+    + mostrarReporte(): void
+    + guardarEnArchivo(): void
+}
+
+interface SistemaNovaStream <<interface>> {
+    + cargarUsuarios(rutaArchivo: String): boolean
+    + cargarContenidos(rutaArchivo: String): boolean
+    + iniciarSesion(rut: String, clave: String): Usuario
+    + buscarContenidoPorId(id: String): Contenido
+    + registrarPelicula(titulo: String, anio: int, genero: String, duracion: int): void
+    + registrarSerie(titulo: String, anio: int, genero: String, temporadas: int, episodios: int, duracionEp: int): void
+    + registrarDocumental(titulo: String, anio: int, genero: String, duracionMin: int, tema: String): void
+    + mostrarProximosAVencer(): void
+    + mostrarContenidos(tipo: String): void
+}
+
+class SistemaNovaStreamImpl {
+    - instancia: SistemaNovaStreamImpl
+    - usuarios: Set<Usuario>
+    - catalogoContenidos: Map<String, Contenido>
+    - contadorIdContenido: int
+
+    + getInstance(): SistemaNovaStreamImpl
+}
+
+'herencia
+Contenido <|-- Pelicula
+Contenido <|-- Serie
+Contenido <|-- Documental
+
+SistemaNovaStreamImpl ..|> SistemaNovaStream: <<implements>>
+
+'representamos singleton
+SistemaNovaStreamImpl --> "1" SistemaNovaStreamImpl
+SistemaNovaStreamImpl *-- Contenido
+ReporteReproduccion *-- Contenido: contiene
+Usuario *-- ReporteReproduccion: genera
+@enduml
